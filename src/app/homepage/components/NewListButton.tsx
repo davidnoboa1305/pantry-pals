@@ -32,7 +32,7 @@ export default function NewListButton() {
     return (
         <>
             <button onClick={openNewListModal} className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-lg transition-colors cursor-pointer mb-6">
-                +
+                New List
             </button>
             {newListButtonClicked && (
                 <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
@@ -63,7 +63,7 @@ export default function NewListButton() {
                                 className="w-full mb-4 bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white placeholder:text-gray-500 border border-gray-300 dark:border-gray-700 rounded-lg py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
                             />
 
-                            {/* Add Friends Button */}
+                            {/* Add Member Button */}
                             <button 
                             type="button" 
                             onClick={openCloseAddFriendsModal} 
@@ -122,12 +122,11 @@ export default function NewListButton() {
                             <div className="flex justify-end gap-4">
                                 <button
                                     type="submit"
-                                    className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-lg transition-colors cursor-pointer mt-4"
-                                >
+                                    className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-lg transition-colors cursor-pointer mt-4">
                                     Create List
                                 </button>
                                 <button onClick={closeNewListModal} className="bg-gray-300 hover:bg-gray-400 text-gray-800 py-2 px-4 rounded-lg transition-colors cursor-pointer mt-4">
-                                Close
+                                    Close
                                 </button>
                             </div>
                         </form>

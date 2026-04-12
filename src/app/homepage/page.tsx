@@ -1,5 +1,6 @@
 import Link from "next/link";
 import NewListButton from "./components/NewListButton";
+import AddFriendButton from "./components/AddFriendButton";
 
 export default function Homepage() {
     return (
@@ -36,7 +37,7 @@ export default function Homepage() {
                         </div>
                         ))}
                     </div>
-                    <div className="mt-6">
+                    <div className="absolute bottom-6 left-6">
                         <NewListButton />
                     </div>
 
@@ -71,6 +72,9 @@ export default function Homepage() {
                                 </div>
                             </div>
                         ))}
+                    </div>
+                    <div className="absolute bottom-6 right-6">
+                        <AddFriendButton />
                     </div>
                 </aside>
             </main>
