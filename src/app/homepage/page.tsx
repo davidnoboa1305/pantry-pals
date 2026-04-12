@@ -1,4 +1,5 @@
 import Link from "next/link";
+import NewListButton from "./components/NewListButton";
 
 export default function Homepage() {
     return (
@@ -22,6 +23,9 @@ export default function Homepage() {
                 <aside className="w-1/4 p-6 border-r border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900">
                     <h2 className="text-lg font-semibold mb-6 text-gray-900 dark:text-white">Shopping List:</h2>
                     <div className="space-y-4">
+                        {/* List items
+                            Has to  be connected to the database.
+                            Few example items */}
                         {[ { list_name: "Amazon"}, { list_name: "Walmart"}, { list_name: "Target"}].map((list) => (
                         <div key={list.list_name} className="flex items-center justify-between p-4 border border-gray-200 dark:border-gray-800 rounded-lg bg-zinc-50 dark:bg-black hover:border-blue-400 dark:hover:border-blue-500 transition-colors cursor-pointer">
                             <div className="flex items-center gap-3">
@@ -32,6 +36,10 @@ export default function Homepage() {
                         </div>
                         ))}
                     </div>
+                    <div className="mt-6">
+                        <NewListButton />
+                    </div>
+
                 </aside>
 
                 {/* Center Content Area (Selected List) */}
