@@ -1,4 +1,8 @@
+'use client';
 import Link from "next/link";
+import { useActionState } from "react";
+import { register } from "@/app/actions/auth";
+
 export default function Register() {
     return (
         <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
@@ -21,7 +25,31 @@ export default function Register() {
                 <p className="text-lg text-gray-700 dark:text-gray-300 mb-8">
                     Create an account to get started with Pantry Pals.
                 </p>
-                <form className="w-full max-w-sm  dark:bg-gray-900 p-6 rounded shadow-md">
+                <form action = {register} className="w-full max-w-sm  dark:bg-gray-900 p-6 rounded shadow-md">
+                    <div className="mb-4">
+                        <label htmlFor="firstname" className="flex flex-col text-gray-700 dark:text-gray-300 mb-2">
+                            First Name
+                        </label>
+                        <input
+                            type="text"
+                            id="firstname"
+                            name= "firstname"
+                            required
+                            className="bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-600 rounded py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        />
+                    </div>
+                    <div className="mb-4">
+                        <label htmlFor="lastname" className="flex flex-col text-gray-700 dark:text-gray-300 mb-2">
+                            Last Name
+                        </label>
+                        <input
+                            type="text"
+                            id="lastname"
+                            name="lastname"
+                            required
+                            className="bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-600 rounded py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        />
+                    </div>
                     <div className="mb-4">
                         <label htmlFor="username" className="flex flex-col text-gray-700 dark:text-gray-300 mb-2">
                             Username
@@ -29,6 +57,8 @@ export default function Register() {
                         <input
                             type="text"
                             id="username"
+                            name="username"
+                            required
                             className="bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-600 rounded py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
                         />
                     </div>
@@ -39,6 +69,8 @@ export default function Register() {
                         <input
                             type="email"
                             id="email"
+                            name="email"
+                            required
                             className="bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-600 rounded py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
                         />
                     </div>
@@ -49,6 +81,8 @@ export default function Register() {
                         <input
                             type="password"
                             id="password"
+                            name="password"
+                            required
                             className="bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-600 rounded py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
                         />
                     </div>
