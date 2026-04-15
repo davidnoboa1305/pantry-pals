@@ -1,79 +1,74 @@
 import Link from "next/link";
+import Image from "next/image";
 import NewListButton from "./components/NewListButton";
 import AddFriendButton from "./components/AddFriendButton";
 
 export default function Homepage() {
     return (
-        <div className="flex flex-col h-screen w-screen bg-zinc-50 text-gray-900 dark:bg-black dark:text-gray-100 antialiased overflow-hidden">
-            {/* Navigation */}
-            <nav className="w-full flex items-center justify-between p-4 bg-white dark:bg-black border-b border-gray-200 dark:border-gray-800">
-                <div className="text-xl font-bold text-black dark:text-white">Pantry Pals</div>
-                <div className="flex space-x-4">
-                    <Link href="/" className="text-gray-700 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400 transition-colors">
+        <div className="flex flex-col h-screen w-screen bg-[#F4F1EA] font-sans overflow-hidden">
+            {/* Navigation - Dark Top Bar */}
+            <nav className="w-full flex items-center justify-between p-4 bg-[#1A3636] shadow-md z-20">
+                <div className="text-xl font-bold text-[#D6BD98]">Pantry Pals</div>
+                <div className="flex space-x-6">
+                    <Link href="/" className="text-white hover:text-[#D6BD98] font-medium transition-colors">
                         Home
                     </Link>
-                    <Link href="/about" className="text-gray-700 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400 transition-colors">
+                    <Link href="/about" className="text-gray-300 hover:text-[#D6BD98] font-medium transition-colors">
                         About
                     </Link>
-              
                 </div>
             </nav>
 
-            <main className="flex flex-1 grow w-full border-b border-gray-200 dark:border-gray-800">
-                {/* Left Side Panel (Lists) */}
-                <aside className="w-1/4 p-6 border-r border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900">
-                    <h2 className="text-lg font-semibold mb-6 text-gray-900 dark:text-white">Shopping List:</h2>
-                    <div className="space-y-4">
-                        {/* List items
-                            Has to  be connected to the database.
-                            Few example items */}
-                        {[ { list_name: "Amazon"}, { list_name: "Walmart"}, { list_name: "Target"}].map((list) => (
-                        <div key={list.list_name} className="flex items-center justify-between p-4 border border-gray-200 dark:border-gray-800 rounded-lg bg-zinc-50 dark:bg-black hover:border-blue-400 dark:hover:border-blue-500 transition-colors cursor-pointer">
-                            <div className="flex items-center gap-3">
-                                <div>
-                                    <span className="font-medium text-gray-800 dark:text-gray-200">{list.list_name}</span>
+            <main className="flex flex-1 grow w-full overflow-hidden">
+                {/* Left Side Panel (Lists) - Dark Sidebar Extends the Nav */}
+                <aside className="w-1/4 p-6 bg-[#1A3636] border-r border-white/5 relative z-10 shadow-lg">
+                    <h2 className="text-xs uppercase tracking-widest font-bold mb-6 text-[#D6BD98]/80">Shopping Lists</h2>
+                    <div className="space-y-3">
+                        {/* List items connected to the database */}
+                        {[].map((list) => (
+                            <div key={list.list_name} className="flex items-center justify-between p-4 rounded-lg bg-white/5 border border-transparent hover:border-white/10 hover:bg-white/10 transition-all cursor-pointer">
+                                <div className="flex items-center gap-3">
+                                    <span className="font-medium text-white">{list.list_name}</span>
                                 </div>
                             </div>
-                        </div>
                         ))}
                     </div>
-                    <div className="absolute bottom-6 left-6">
+                    <div className="absolute bottom-6 left-6 right-6">
                         <NewListButton />
                     </div>
-
                 </aside>
 
-                {/* Center Content Area (Selected List) */}
-                <div className="w-full p-10 flex flex-col items-center justify-center bg-zinc-50 dark:bg-black">
-                    <div className="w-full h-full p-8 border-4 border-dashed border-gray-300 dark:border-gray-700 rounded-3xl flex items-center justify-center bg-white dark:bg-gray-900 shadow-sm dark:shadow-inner">
-                        <span className="text-2xl font-bold tracking-tight text-gray-400 dark:text-gray-500">
-                            Edit list here SELECTED
+                {/* Center Content Area (Selected List) - Warm Canvas Workspace */}
+                <div className="w-2/4 p-10 flex flex-col items-center justify-center bg-[#F4F1EA]">
+                    <div className="w-full h-full p-8 border-2 border-dashed border-[#677D6A]/30 rounded-2xl flex items-center justify-center bg-white shadow-sm transition-all hover:border-[#677D6A]/60">
+                        <span className="text-xl font-semibold tracking-tight text-[#1A3636]/40">
+                            Select or create a list to start editing
                         </span>
                     </div>
                 </div>
 
-                {/* Right Side Panel (Friend list) */}
-                <aside className="w-1/4 p-6 border-l border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900">
-                    <h2 className="text-lg font-semibold mb-6 text-gray-900 dark:text-white">Friend Requests:</h2>
-                    <div className="space-y-4">
-                        {[ { username: "Jofish"}, { username: "Deivis"}, { username: "Garv"}].map((user, idx) => (
-                            <div key={idx} className="flex items-center justify-between p-4 border border-gray-200 dark:border-gray-800 rounded-lg bg-zinc-50 dark:bg-black">
+                {/* Right Side Panel (Friend list) - Clean White Surface */}
+                <aside className="w-1/4 p-6 bg-white border-l border-[#1A3636]/10 relative z-10 shadow-[-4px_0_15px_-3px_rgba(0,0,0,0.02)]">
+                    <h2 className="text-xs uppercase tracking-widest font-bold mb-6 text-[#677D6A]">Friend Requests</h2>
+                    <div className="space-y-3">
+                        {[].map((user, idx) => (
+                            <div key={idx} className="flex items-center justify-between p-4 rounded-xl bg-[#F4F1EA] border border-[#1A3636]/5 hover:shadow-md transition-shadow">
                                 <div>
-                                    <span className="font-medium text-gray-800 dark:text-gray-200">{user.username}</span>
+                                    <span className="font-semibold text-[#1A3636]">{user.username}</span>
                                 </div>
                                 <div className="flex items-center gap-2">
-                                    {/* Wrapped these in buttons for better interactivity/accessibility */}
-                                    <button className="flex items-center justify-center w-8 h-8 border border-gray-300 dark:border-gray-700 rounded bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:text-green-600 hover:border-green-500 dark:hover:text-green-400 dark:hover:border-green-400 transition-colors">
-                                        ☑
+                                    {/* Updated to clean circular buttons */}
+                                    <button className="flex items-center justify-center w-8 h-8 rounded-full bg-white border border-[#1A3636]/10 text-[#677D6A] hover:bg-[#677D6A] hover:text-white hover:border-transparent transition-all shadow-sm">
+                                        <Image src="/check.svg" alt="Accept" width={16} height={16} />
                                     </button>
-                                    <button className="flex items-center justify-center w-8 h-8 border border-gray-300 dark:border-gray-700 rounded bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:text-red-600 hover:border-red-500 dark:hover:text-red-400 dark:hover:border-red-400 transition-colors">
-                                        ☒
+                                    <button className="flex items-center justify-center w-8 h-8 rounded-full bg-white border border-[#1A3636]/10 text-red-400 hover:bg-red-500 hover:text-white hover:border-transparent transition-all shadow-sm">
+                                        <Image src="/x.svg" alt="Decline" width={16} height={16} />
                                     </button>
                                 </div>
                             </div>
                         ))}
                     </div>
-                    <div className="absolute bottom-6 right-6">
+                    <div className="absolute bottom-6 left-6 right-6 flex justify-end">
                         <AddFriendButton />
                     </div>
                 </aside>

@@ -18,31 +18,45 @@ export default function AddFriendButton() {
 
     return (
         <>
-            <button onClick={openCloseAddFriendsModal} className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-lg transition-colors cursor-pointer mb-6">
-                Add Friend
+            <button 
+                onClick={openCloseAddFriendsModal} 
+                className="w-full bg-[#D6BD98] hover:bg-[#677D6A] text-[#1A3636] hover:text-white font-bold py-3 px-4 rounded-lg shadow-md transition-all duration-200 cursor-pointer"
+            >
+                + Add Friend
             </button>
+            
             {addFriendsButtonClicked && (
-                <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-                    <div className="bg-white dark:bg-gray-900 p-6 rounded-lg shadow-lg w-96">
-                        <h2 className="text-xl font-semibold mb-4 text-gray-900 dark:text-white">Add Friend</h2>
+                <div className="fixed inset-0 flex items-center justify-center bg-black/60 backdrop-blur-sm z-50">
+                    <div className="bg-[#D6BD98] p-8 rounded-xl shadow-2xl w-[26rem] max-w-[90vw]">
+                        <h2 className="text-2xl font-bold mb-6 text-[#1A3636]">Add Friend</h2>
+                        
                         {/* Form to add friend goes here */}
                         <form onSubmit={handleAddFriend}>
-                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                            <label className="block text-sm font-bold text-[#1A3636] mb-2">
                                 Friend's Username
                             </label>
                             <input
                                 value={friendUsername}
                                 onChange={(e) => setFriendUsername(e.target.value)}
                                 type="text"
-                                placeholder="Username"
-                                className="w-full mb-4 bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white placeholder:text-gray-500 border border-gray-300 dark:border-gray-700 rounded-lg py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                placeholder="e.g. Jophish123"
+                                required
+                                className="w-full mb-6 bg-white/70 text-[#1A3636] placeholder:text-[#1A3636]/50 border border-transparent rounded-lg py-2.5 px-4 focus:outline-none focus:ring-2 focus:ring-[#1A3636] focus:bg-white transition-colors shadow-sm"
                             />
-                            <div>
-                                <button type="submit" className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-lg transition-colors cursor-pointer mt-4">
-                                    Add Friend
-                                </button>
-                                <button onClick={openCloseAddFriendsModal} className="bg-gray-300 hover:bg-gray-400 text-gray-800 py-2 px-4 rounded-lg transition-colors cursor-pointer mt-4 ml-4">
+                            
+                            <div className="flex justify-end gap-3 mt-2 pt-4 border-t border-[#1A3636]/20">
+                                <button 
+                                    type="button"
+                                    onClick={openCloseAddFriendsModal} 
+                                    className="bg-white/50 hover:bg-white/80 text-[#1A3636] font-bold py-2 px-5 rounded-lg transition-colors cursor-pointer shadow-sm"
+                                >
                                     Cancel
+                                </button>
+                                <button 
+                                    type="submit" 
+                                    className="bg-[#1A3636] hover:bg-[#677D6A] text-[#D6BD98] hover:text-white font-bold py-2 px-6 rounded-lg transition-colors cursor-pointer shadow-md"
+                                >
+                                    Send Request
                                 </button>
                             </div>
                         </form>
