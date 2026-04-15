@@ -1,6 +1,6 @@
 'use client';
 import { useActionState } from "react";
-import { login } from "@/app/actions/auth";
+import { login } from "@/actions/authActions";
 import Link from "next/link";
 
 export default function Login() {

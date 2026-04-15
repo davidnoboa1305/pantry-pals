@@ -32,7 +32,7 @@ export default function Home() {
           <p className="text-lg text-gray-200 mb-8">
             Your friendly assistant for managing your pantry and finding recipes.
           </p>
-          <Link href="/homepage" className="px-6 py-3 bg-[#D6BD98] text-black hover:text-white rounded hover:bg-[#677D6A] hover:shadow-lg transition duration-100">
+          <Link href="/dashboard" className="px-6 py-3 bg-[#D6BD98] text-black hover:text-white rounded hover:bg-[#677D6A] hover:shadow-lg transition duration-100">
             Get Started
           </Link>
         </div>

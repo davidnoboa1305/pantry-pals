@@ -1,5 +1,6 @@
 'use server';
 import { createClient } from "@/lib/supabase/server";
+import { error } from "console";
 import {redirect} from "next/navigation";
 
 
@@ -13,7 +14,7 @@ export async function login(formData: FormData) {
 
     if (!username || !password) {
         console.error("Username and password are required.");
-        return;
+        return {error: "Username and password are required"};
     }
 
     const {data: User, error: userError} = await supabase
@@ -24,7 +25,7 @@ export async function login(formData: FormData) {
 
     if (userError || !User) {
         console.error("Login error: ", userError);
-        return;
+        return {error: "Invalid username or password"};
     }
 
     const { error: authError } = await supabase.auth.signInWithPassword({
@@ -34,11 +35,11 @@ export async function login(formData: FormData) {
 
     if (authError) {
         console.error("Login error:", authError);
-        return;
+        return {error: "Invalid username or password"};
     }
 
     console.log("User logged in successfully:", username);
-    redirect("/homepage");
+    redirect("/dashboard");
 }
 
 export async function register(formData: FormData) {

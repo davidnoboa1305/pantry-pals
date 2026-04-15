@@ -16,6 +16,9 @@ export default function Homepage() {
                     <Link href="/about" className="text-gray-300 hover:text-[#D6BD98] font-medium transition-colors">
                         About
                     </Link>
+                    <Link href="/logout" className="text-gray-300 hover:text-[#D6BD98] font-medium transition-colors">
+                        Logout
+                    </Link>
                 </div>
             </nav>
 
