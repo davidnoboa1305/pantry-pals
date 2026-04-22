@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import NewItemButton from './NewItemButton';
-import { deleteItem } from "@/actions/itemActions"; // 1. Import the delete action
+import { deleteItem } from "@/actions/itemActions";
 
 type SplitUser = {
     UserID: string;
@@ -65,31 +65,32 @@ export default function SelectedList({ list }: { list: ListDetails }) {
                         list.Items.map((item) => {
                             const splitCount = item.ItemSplits?.length || 1;
                             const hasPrice = item.Price && item.Price > 0;
-                            const pricePerPerson = hasPrice ? (item.Price! / splitCount) : 0;
+                            const Quantity = item.Quantity || 1
+                            const pricePerPerson = hasPrice ? (item.Price! / splitCount) * Quantity : 0;
                             const isDeleting = deletingId === item.ItemID;
 
                             return (
-                                <li key={item.ItemID} className={`flex flex-col p-4 rounded-xl bg-[#F4F1EA]/70 border border-[#1A3636]/10 shadow-sm transition-opacity ${isDeleting ? 'opacity-50' : ''}`}>
+                                <li key={item.ItemID} className={`flex flex-col pl-2 pr-0 pt-1 pb-2 rounded-xl bg-[#F4F1EA]/70 border border-[#1A3636]/10 shadow-sm transition-opacity ${isDeleting ? 'opacity-50' : ''}`}>
                                     <div className="flex items-center justify-between mb-2">
                                         <div className="flex items-center gap-3">
-                                            <div className="w-5 h-5 rounded border border-[#677D6A] bg-white"></div>
+                                            <input type="checkbox" className="w-5 h-5 rounded border border-[#677D6A] bg-white" />
                                             <span className="text-[#1A3636] font-bold text-lg">{item.ItemName}</span>
                                         </div>
                                         
-                                        <div className="flex items-center gap-4">
+                                        <div className="flex items-center">
                                             {hasPrice && (
                                                 <span className="text-md font-bold text-[#1A3636]">
-                                                    Total: ${item.Price!.toFixed(2)}
+                                                    Total: ${(item.Price! * Quantity).toFixed(2)}
                                                 </span>
                                             )}
                                             <button 
                                                 onClick={() => handleDeleteItem(item.ItemID)}
                                                 disabled={isDeleting}
-                                                className="flex items-center justify-center w-8 h-8 rounded-full bg-white border border-[#1A3636]/10 text-red-400 hover:bg-red-500 hover:text-white hover:border-transparent transition-all shadow-sm disabled:cursor-not-allowed"
+                                                className="flex items-center justify-center w-8 h-8 text-red-400 hover:text-red-500 disabled:cursor-not-allowed"
                                                 title="Delete item"
                                             >
                                                 {isDeleting ? (
-                                                    <span className="w-4 h-4 border-2 border-red-400 border-t-transparent rounded-full animate-spin"></span>
+                                                    <span className="w-4 h-4 border-2 border-red-300 border-t-transparent rounded-full animate-spin"></span>
                                                 ) : (
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                                                         <line x1="18" y1="6" x2="6" y2="18"></line>
@@ -100,7 +101,7 @@ export default function SelectedList({ list }: { list: ListDetails }) {
                                         </div>
                                     </div>
                                     {item.ItemSplits && item.ItemSplits.length > 0 && (
-                                        <div className="ml-8 mt-1 flex items-center justify-between">
+                                        <div className="mx-8 flex items-center justify-between">
                                             <div className="flex flex-wrap gap-1">
                                                 {item.ItemSplits.map(split => (
                                                     <span key={split.UserID} className="text-xs font-semibold bg-[#D6BD98]/40 text-[#1A3636] px-2 py-1 rounded-md border border-[#D6BD98]">

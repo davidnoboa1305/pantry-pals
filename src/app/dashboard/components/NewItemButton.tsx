@@ -16,6 +16,7 @@ export default function NewItemButton({ listID, groupID }: { listID: string, gro
 
     const [itemName, setItemName] = useState("");
     const [price, setPrice] = useState("");
+    const [quantity, setQuantity] = useState("")
     const [selectedMembers, setSelectedMembers] = useState<string[]>([]);
     
     const [groupMembers, setGroupMembers] = useState<GroupMember[]>([]);
@@ -30,6 +31,7 @@ export default function NewItemButton({ listID, groupID }: { listID: string, gro
         setIsModalOpen(false);
         setItemName("");
         setPrice("");
+        setQuantity("");
         setSelectedMembers([]);
         setSplitMode("all");
     };
@@ -69,7 +71,7 @@ export default function NewItemButton({ listID, groupID }: { listID: string, gro
         );
     };
 
-    async function handleAddItem(e: React.FormEvent<HTMLFormElement>) {
+    async function handleAddItem(e: React.SubmitEvent<HTMLFormElement>) {
         e.preventDefault();
         if (!itemName.trim() || selectedMembers.length === 0) {
             alert("Please provide an item name and select at least one person to split with.");
@@ -82,6 +84,7 @@ export default function NewItemButton({ listID, groupID }: { listID: string, gro
         formData.append("itemName", itemName);
         formData.append("listID", listID);
         formData.append("price", price);
+        formData.append("quantity", quantity)
         formData.append("sharedWith", JSON.stringify(selectedMembers)); 
 
         const result = await createItem(formData);
@@ -112,6 +115,10 @@ export default function NewItemButton({ listID, groupID }: { listID: string, gro
 
                             <label className="block text-sm font-bold text-[#1A3636] mb-2">Total Price ($)</label>
                             <input value={price} onChange={(e) => setPrice(e.target.value)} type="number" step="0.01" min="0" placeholder="0.00" className="w-full mb-6 bg-white/70 text-[#1A3636] placeholder:text-[#1A3636]/50 border border-transparent rounded-lg py-2.5 px-4 focus:outline-none focus:ring-2 focus:ring-[#1A3636]" />
+                            
+                            <label className="block text-sm font-bold text-[#1A3636] mb-2">Quantity</label>
+                            <input value={quantity} onChange={(e) => setQuantity(e.target.value)} type="number" step="1" min="0" placeholder="0" className="w-full mb-6 bg-white/70 text-[#1A3636] placeholder:text-[#1A3636]/50 border border-transparent rounded-lg py-2.5 px-4 focus:outline-none focus:ring-2 focus:ring-[#1A3636]" />
+                            
                             <div className="bg-white/30 p-4 rounded-lg mb-6">
                                 <h3 className="text-sm font-bold text-[#1A3636] mb-3">How are you splitting this?</h3>
                                 
