@@ -46,3 +46,25 @@ export async function deleteList(formData: FormData) {
     revalidatePath("/dashboard");
     //return {success: true};
 }
+
+export async function getUserLists() {
+    const supabase = await createClient();
+    const {data: { user }} = await supabase.auth.getUser();
+    if (!user) {
+        console.error("User not authenticated.");
+        return;
+    }
+
+    const {data: owned} = await supabase
+        .from("GroceryList")
+        .select("*")
+        .eq("UserID", user.id);
+    const {data: shared} = await supabase
+        .from("GroupMember")
+        .select("GroceryList (*)")
+        .eq("UserID", user.id);
+
+    const sharedLists = shared?.map((s) => s.GroceryList) || [];
+
+    return [...(owned || []), ...sharedLists];
+}

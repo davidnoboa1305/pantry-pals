@@ -1,5 +1,3 @@
-'use client';
-import { useActionState } from "react";
 import { login } from "@/actions/authActions";
 import Link from "next/link";
 

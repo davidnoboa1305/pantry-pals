@@ -14,7 +14,7 @@ export async function login(formData: FormData) {
 
     if (!username || !password) {
         console.error("Username and password are required.");
-        return {error: "Username and password are required"};
+        return;
     }
 
     const {data: User, error: userError} = await supabase
@@ -25,7 +25,7 @@ export async function login(formData: FormData) {
 
     if (userError || !User) {
         console.error("Login error: ", userError);
-        return {error: "Invalid username or password"};
+        return;
     }
 
     const { error: authError } = await supabase.auth.signInWithPassword({
@@ -35,7 +35,7 @@ export async function login(formData: FormData) {
 
     if (authError) {
         console.error("Login error:", authError);
-        return {error: "Invalid username or password"};
+        return;
     }
 
     console.log("User logged in successfully:", username);

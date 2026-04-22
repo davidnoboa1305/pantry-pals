@@ -1,5 +1,6 @@
 'use server';
 import { createClient } from "@/lib/supabase/server";
+import { error } from "console";
 import { revalidatePath } from "next/cache";
 
 export async function sendFriendRequest(formData: FormData) {
@@ -81,4 +82,67 @@ export async function removeFriend(formData: FormData) {
     }
     revalidatePath("/dashboard");
     return {success: true};
+}
+
+export async function getFriendList() {
+    const supabase = await createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) {
+        console.error("User not authenticated.");
+        return;
+    }
+
+    const { data: friends, error } = await supabase
+        .from("FriendList")
+        .select(`
+            FriendListID,
+            RequesterID,
+            TargetID,
+            Requester:UserProfile!FriendList_RequesterID_fkey ( UserID, UserName ),
+            Target:UserProfile!FriendList_TargetID_fkey ( UserID, UserName )
+        `)
+        .eq("Status", "accepted")
+        .or(`RequesterID.eq.${user.id},TargetID.eq.${user.id}`);
+
+    if (error || !friends)  {
+        console.error("Error fetching friend list:", error);
+        return;
+    }
+
+    const formattedFriends = friends.map(friend => {
+        const friendInfo = friend.RequesterID === user.id ? friend.Target : friend.Requester;
+        const actualProfile = Array.isArray(friendInfo) ? friendInfo[0] : friendInfo; // Handle case where friendInfo might be an array
+        return {
+            userID: actualProfile?.UserID,
+            username: actualProfile?.UserName,
+            friendListID: friend.FriendListID,
+        };
+    });
+
+    return formattedFriends;
+}
+
+export async function getPendingFriendRequests() {
+    const supabase = await createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) {
+        console.error("User not authenticated.");
+        return;
+    }
+
+    const { data: requests, error } = await supabase
+        .from("FriendList")
+        .select(`
+            FriendListID,
+            Requestr:UserProfile!FriendList_RequesterID_fkey ( UserID, UserName )
+        `)
+        .eq("Status", "pending")
+        .eq("TargetID", user.id);
+
+    if (error || !requests) {
+        console.error("Error fetching pending friend requests:", error);
+        return [];
+    }
+
+    return requests || [];
 }
