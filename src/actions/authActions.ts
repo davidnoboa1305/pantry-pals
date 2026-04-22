@@ -1,92 +1,77 @@
 'use server';
 import { createClient } from "@/lib/supabase/server";
-import { error } from "console";
-import {redirect} from "next/navigation";
-
+import { redirect } from "next/navigation";
 
 export async function login(formData: FormData) {
-    //supabase by default uses email and password
     const supabase = await createClient();
-    const username = formData.get("username") as string; // implement later
+    const username = formData.get("username") as string;
     const password = formData.get("password") as string;
-
-    console.log("Attempting login with username: ", username);
-
     if (!username || !password) {
-        console.error("Username and password are required.");
-        return;
+        return { error: "Username and password are required." };
     }
-
-    const {data: User, error: userError} = await supabase
-    .from("UserProfile")
-    .select("Email")
-    .eq("UserName", username)
-    .single();
-
+    const { data: User, error: userError } = await supabase
+        .from("Users") // <-- UPDATED to match new schema
+        .select("Email")
+        .eq("UserName", username)
+        .single();
     if (userError || !User) {
-        console.error("Login error: ", userError);
-        return;
+        console.error("Login error - User not found: ", userError);
+        return { error: "Invalid username or password." };
     }
-
     const { error: authError } = await supabase.auth.signInWithPassword({
         email: User.Email,
         password,
     });
-
     if (authError) {
         console.error("Login error:", authError);
-        return;
+        return { error: authError.message };
     }
-
-    console.log("User logged in successfully:", username);
     redirect("/dashboard");
 }
 
 export async function register(formData: FormData) {
-    //supabase by default uses email and password
     const supabase = await createClient();
-    const firstname = formData.get("firstname") as string; // implement later
-    const lastname = formData.get("lastname") as string; // implement later
-    const username = formData.get("username") as string; // implement later
+    const firstname = formData.get("firstname") as string;
+    const lastname = formData.get("lastname") as string;
+    const username = formData.get("username") as string;
     const email = formData.get("email") as string;
     const password = formData.get("password") as string;
-
-    const {data: authData, error: authError} = await supabase.auth.signUp({ email, password, options: { data: { firstname, lastname, username } } });
-
+    const { data: authData, error: authError } = await supabase.auth.signUp({ 
+        email, 
+        password, 
+        options: { 
+            data: { firstname, lastname, username } 
+        } 
+    });
     if (authError) {
         console.error("Signup error:", authError.message);
-        return;
+        return { error: authError.message };
     }
-
-    if (authData.user) { //send contents to database
-        const {error: dbError} = await supabase.from("UserProfile").insert({
-            UserID: authData.user.id,
-            FirstName: firstname,
-            LastName: lastname,
-            UserName: username,
-            Email: email,
-        });
+    if (authData.user) { 
+        const { error: dbError } = await supabase
+            .from("Users") // <-- UPDATED to match new schema
+            .insert({
+                UserID: authData.user.id,
+                FirstName: firstname,
+                LastName: lastname,
+                UserName: username,
+                Email: email,
+            });
 
         if (dbError) {
             console.error("Database error:", dbError.message);
-            return;
+            return { error: "Account created, but failed to set up profile." };
         }
-
-        console.log("User registered successfully:", authData.user);
     }
-
-    
-
     redirect("/login");
 }
-
 export async function logout() {
     const supabase = await createClient();
     const { error } = await supabase.auth.signOut();
+    
     if (error) {
         console.error("Logout error:", error);
-    } else {
-        console.log("User logged out successfully");
-    }
+    } 
+    
     redirect("/login");
 }

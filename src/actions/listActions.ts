@@ -6,65 +6,115 @@ import { revalidatePath } from "next/cache";
 export async function createList(formData: FormData) {
     const supabase = await createClient();
     const {data: { user }} = await supabase.auth.getUser();
+    
     if (!user) {
         console.error("User not authenticated.");
         return {error: "User not authenticated"};
     }
 
+    // Extract the new fields we added to the frontend form
     const listName = formData.get("listName") as string;
+    const listDescription = formData.get("listDescription") as string;
+    const groupID = formData.get("groupID") as string;
+
+    if (!groupID) {
+        return {error: "A group must be selected to create a list."};
+    }
+
     const { error } = await supabase
-        .from("GroceryList")
+        .from("GroceryLists")
         .insert({
             ListName: listName,
-            UserID: user.id, //owner of the list is the user who created it
+            ListDescription: listDescription,
+            GroupID: groupID, 
+            CreatedBy: user.id, 
         });
+
     if (error) {
         console.error("Error creating list:", error);
         return {error: "Error creating list"};
     }
+
     revalidatePath("/dashboard");
-    //return {success: true};
+    return {success: true};
 }
 
 export async function deleteList(formData: FormData) {
     const supabase = await createClient();
     const {data: { user }} = await supabase.auth.getUser();
+    
     if (!user) {
         console.error("User not authenticated.");
         return {error: "User not authenticated"};
     }
+    
     const groceryListID = formData.get("listID") as string;
+    
     const { error } = await supabase
-        .from("GroceryList")
+        .from("GroceryLists")
         .delete()
         .eq("GroceryListID", groceryListID)
-        .eq("UserID", user.id);
+        .eq("CreatedBy", user.id); 
+
     if (error) {
         console.error("Error deleting list:", error);
         return {error: "Error deleting list"};
     }
+    
     revalidatePath("/dashboard");
-    //return {success: true};
+    return {success: true};
 }
 
 export async function getUserLists() {
     const supabase = await createClient();
     const {data: { user }} = await supabase.auth.getUser();
+    
     if (!user) {
         console.error("User not authenticated.");
-        return;
+        return [];
     }
 
-    const {data: owned} = await supabase
-        .from("GroceryList")
-        .select("*")
-        .eq("UserID", user.id);
-    const {data: shared} = await supabase
-        .from("GroupMember")
-        .select("GroceryList (*)")
-        .eq("UserID", user.id);
+    const { data: lists, error } = await supabase
+        .from("GroceryLists")
+        .select(`
+            *,
+            Groups ( GroupName )
+        `)
+        .order('DateCreated', { ascending: false });
 
-    const sharedLists = shared?.map((s) => s.GroceryList) || [];
+    if (error) {
+        console.error("Error fetching user lists:", error);
+        return [];
+    }
 
-    return [...(owned || []), ...sharedLists];
+    return lists || [];
+}
+
+export async function getListDetails(listId: string) {
+    const supabase = await createClient();
+    const {data: { user }} = await supabase.auth.getUser();
+    
+    if (!user) return null;
+
+    const { data: list, error } = await supabase
+        .from("GroceryLists")
+        .select(`
+            *,
+            Groups ( GroupName ),
+            Items ( 
+                *,
+                ItemSplits (
+                    UserID,
+                    Users ( UserName, FirstName )
+                )
+            )
+        `)
+        .eq("GroceryListID", listId)
+        .maybeSingle(); 
+
+    if (error) {
+        console.error("Error fetching list details:", error);
+        return null;
+    }
+    return list;
 }
