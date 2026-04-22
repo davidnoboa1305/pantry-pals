@@ -74,7 +74,11 @@ export default function SelectedList({ list }: { list: ListDetails }) {
                                     <div className="flex items-center justify-between mb-2">
                                         <div className="flex items-center gap-3">
                                             <input type="checkbox" className="w-5 h-5 rounded border border-[#677D6A] bg-white" />
-                                            <span className="text-[#1A3636] font-bold text-lg">{item.ItemName}</span>
+                                            <div className='flex items-center gap-1'>
+                                                <span className="text-[#1A3636] font-bold text-md">{item.Quantity}</span>
+                                                <span className="text-[#1A3636] font-bold text-md">{item.ItemName}</span>
+                                            </div>
+
                                         </div>
                                         
                                         <div className="flex items-center">

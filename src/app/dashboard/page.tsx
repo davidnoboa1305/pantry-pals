@@ -28,12 +28,6 @@ export default async function Homepage(props: { searchParams: SearchParams }) {
                     Welcome! {user?.FirstName}
                 </div>
                 <div className="flex space-x-6">
-                    <Link href="/" className="text-white hover:text-[#D6BD98] font-medium transition-colors">
-                        Home
-                    </Link>
-                    <Link href="/about" className="text-gray-300 hover:text-[#D6BD98] font-medium transition-colors">
-                        About
-                    </Link>
                     <Link href="/login" onClick={logout} className="text-gray-300 hover:text-[#D6BD98] font-medium transition-colors">
                         Logout
                     </Link>
