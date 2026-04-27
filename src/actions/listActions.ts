@@ -118,3 +118,56 @@ export async function getListDetails(listId: string) {
     }
     return list;
 }
+// TO DO: Implement updateListName and updateListDescription functions to allow users to edit their lists.
+export async function updateListName(formData: FormData) {
+    const supabase = await createClient();
+    const {data: { user }} = await supabase.auth.getUser();
+    if (!user) {
+        console.error("User not authenticated.");
+        return;
+    }
+
+    const listID = formData.get("listID") as string;
+    const newName = formData.get("listName") as string;
+
+    const { error } = await supabase
+        .from("GroceryLists")
+        .update({ ListName: newName })
+        .eq("GroceryListID", listID)
+        .eq("CreatedBy", user.id);
+
+    if (error) {
+        console.error("Error updating list name:", error);
+        return { error: "Error updating list name" };
+    }
+    revalidatePath("/dashboard");
+    return { success: true };
+    
+}
+
+export async function updateListDescription(formData: FormData) {
+    const supabase = await createClient();
+    const {data: { user }} = await supabase.auth.getUser();
+    if (!user) {
+        console.error("User not authenticated.");
+        return;
+    }
+
+    const listID = formData.get("listID") as string;
+    const newDescription = formData.get("listDescription") as string;
+
+    const { error } = await supabase
+        .from("GroceryLists")
+        .update({ ListDescription: newDescription })
+        .eq("GroceryListID", listID)
+        .eq("CreatedBy", user.id);
+
+    if (error) {
+        console.error("Error updating list description:", error);
+        return { error: "Error updating list description" };
+    }
+
+    revalidatePath("/dashboard");
+    return { success: true };
+
+}

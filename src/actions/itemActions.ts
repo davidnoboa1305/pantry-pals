@@ -82,3 +82,35 @@ export async function deleteItem(formData: FormData) {
     revalidatePath("/dashboard");
     return { success: true };
 }
+
+
+export async function updateItem(formData: FormData) {
+    const supabase = await createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+
+    if (!user) {
+        console.error("User not authenticated.");
+        return { error: "User not authenticated" };
+    }
+    const itemID = formData.get("itemID") as string;
+    const itemName = formData.get("itemName") as string;
+    const quantity = parseInt(formData.get("quantity") as string) || 1; 
+    const price = parseFloat(formData.get("price") as string) || 0.0;
+
+    const { error } = await supabase
+        .from("Items")
+        .update({
+            ItemName: itemName,
+            Quantity: quantity,
+            Price: price
+        })
+        .eq("ItemID", itemID);
+
+    if (error) {
+        console.error("Error updating item:", error);
+        return { error: "Error updating item" };
+    }
+
+    revalidatePath("/dashboard");
+    return { success: true };
+}
