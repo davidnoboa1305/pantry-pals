@@ -23,7 +23,7 @@ export default function About() {
                 
                 <div className="w-full max-w-2xl bg-[#D6BD98] p-10 rounded-xl shadow-2xl text-[#1A3636] text-left space-y-6">
                     <p className="text-lg leading-relaxed">
-                        Pantry Pals is your friendly assistant for managing your pantry and finding recipes. We help you keep track of your ingredients, suggest recipes based on what you have, and make meal planning easier than ever.
+                        Pantry Pals is your friendly assistant for managing your pantry. It helps you keep track of your ingredients and makes meal planning easier than ever.
                     </p>
                     <p className="text-lg leading-relaxed">
                         Our mission is to reduce food waste and make cooking at home more enjoyable. Whether you are a seasoned chef or just starting out, Pantry Pals is here to help you make the most of your pantry and create delicious meals.
