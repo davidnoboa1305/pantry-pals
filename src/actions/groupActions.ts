@@ -92,8 +92,7 @@ export async function removeUserFromGroup(formData: FormData) {
         console.error("Error removing user from group:", error);
         return { error: "Failed to remove user from group" };
     }
-
-    revalidatePath("/dashboard");
+    revalidatePath("/dashboard", "layout"); 
     return { success: true };
 }
 
@@ -162,6 +161,28 @@ export async function updateGroup(formData: FormData) {
     if (error) {
         console.error("Error updating group:", error);
         return { error: "Failed to update group name." };
+    }
+
+    revalidatePath("/dashboard/groups");
+    return { success: true };
+}
+
+export async function deleteGroup(formData: FormData) {
+    const supabase = await createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return { error: "User not authenticated" };
+
+    const groupID = formData.get("groupID") as string;
+
+    const { error } = await supabase
+        .from("Groups")
+        .delete()
+        .eq("GroupID", groupID)
+        .eq("CreatedBy", user.id); // Ensure only the owner can delete it
+
+    if (error) {
+        console.error("Error deleting group:", error);
+        return { error: "Failed to delete group" };
     }
 
     revalidatePath("/dashboard/groups");

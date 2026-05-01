@@ -25,10 +25,16 @@ export default async function Homepage(props: { searchParams: SearchParams }) {
             {/* Navigation - Dark Top Bar */}
             <nav className="w-full flex items-center justify-between p-4 bg-[#1A3636] shadow-md z-20">
                 <div className="text-xl font-bold text-[#D6BD98]">
-                    Welcome! {user?.FirstName}
+                    Welcome {user?.FirstName}!
                 </div>
                 <div className="flex space-x-6">
-                    <Link href="/login" onClick={logout} className="text-gray-300 hover:text-[#D6BD98] font-medium transition-colors">
+                    <Link href="/dashboard/lists" className="text-gray-300 hover:text-[#D6BD98] py-1 font-medium transition-colors">
+                            Lists
+                    </Link>
+                    <Link href="/dashboard/groups" className="text-gray-300 hover:text-[#D6BD98] py-1 font-medium transition-colors">
+                            Groups
+                    </Link>
+                    <Link href="/login" onClick={logout} className="text-black hover:text-white py-1 px-2 bg-[#D6BD98] rounded hover:bg-[#677D6A] hover:shadow-lg transition duration-100 font-medium">
                         Logout
                     </Link>
                 </div>
@@ -38,7 +44,7 @@ export default async function Homepage(props: { searchParams: SearchParams }) {
                 
                 {/* Left Side Panel (Lists) */}
                 <aside className="w-1/5 p-6 bg-[#1A3636] border-r border-white/5 relative z-10 shadow-lg">
-                    <h2 className="text-xs uppercase tracking-widest font-bold mb-6 text-[#D6BD98]/80">Shopping Lists</h2>
+                    <h2 className="text-xs uppercase tracking-widest font-bold mb-3 text-[#D6BD98]/80">Shopping Lists</h2>
                     <div className="space-y-3 overflow-y-auto max-h-[calc(100vh-180px)] custom-scrollbar">
                         {/* Inside the sidebar mapping */}
                         {lists.map((list) => {
@@ -82,16 +88,14 @@ export default async function Homepage(props: { searchParams: SearchParams }) {
 
                 {/* Center Content Area (Selected List) */}
                 <div className="w-3/5 p-10 flex flex-col items-center justify-center bg-[#F4F1EA]">
-                    <SelectedList list={listDetails}/>
+                    <SelectedList list={listDetails} currentUserId={user?.UserID} />
                 </div>
 
                 {/* Right Side Panel (Groups) */}
                 <aside className="w-1/5 p-6 bg-white border-l border-[#1A3636]/10 relative z-10 shadow-[-4px_0_15px_-3px_rgba(0,0,0,0.02)]">
-                    <Link href="/dashboard/groups" className="group flex items-center gap-2 mb-6">
-                        <h2 className="text-xs uppercase tracking-widest font-bold text-[#677D6A] group-hover:text-[#1A3636] transition-colors">
-                            My Groups
-                        </h2>
-                    </Link>
+                    <h2 className="mb-3 text-xs uppercase tracking-widest font-bold text-[#677D6A] group-hover:text-[#1A3636] transition-colors">
+                        My Groups
+                    </h2>
                     <div className="space-y-3 overflow-y-auto max-h-[calc(100vh-180px)] custom-scrollbar">
                         {groups && groups.map((group: any) => (
                             <div key={group.GroupID} className="flex items-center justify-between p-4 rounded-xl bg-[#F4F1EA] border border-[#1A3636]/5 hover:shadow-md transition-shadow">

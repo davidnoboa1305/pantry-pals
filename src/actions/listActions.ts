@@ -68,25 +68,22 @@ export async function deleteList(formData: FormData) {
 export async function getUserLists() {
     const supabase = await createClient();
     const {data: { user }} = await supabase.auth.getUser();
-    
     if (!user) {
         console.error("User not authenticated.");
         return [];
     }
-
     const { data: lists, error } = await supabase
         .from("GroceryLists")
         .select(`
             *,
-            Groups ( GroupName )
+            Groups ( GroupName ),
+            Items ( * ) 
         `)
         .order('DateCreated', { ascending: false });
-
     if (error) {
         console.error("Error fetching user lists:", error);
         return [];
     }
-
     return lists || [];
 }
 
