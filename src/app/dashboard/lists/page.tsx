@@ -1,9 +1,9 @@
 import Link from "next/link";
 import { getUserInfo } from "@/actions/userActions";
 import { logout } from "@/actions/authActions";
-import EditGroupButton from "../components/EditGroupButton";
 import { getUserLists } from "@/actions/listActions";
 import DeleteListButton from "../components/DeleteListButton";
+import EditListButton from "../components/EditListButton";
 
 export default async function ListsPage() {
     const lists = await getUserLists();
@@ -41,23 +41,36 @@ export default async function ListsPage() {
                         {lists && lists.map((list: any) => (
                             <div key={list.GroceryListID} className="bg-white rounded-2xl p-6 shadow-sm border border-[#1A3636]/10 flex flex-col">
                                 <div className="flex justify-between items-start mb-4">
-                                    <div>
-                                        <Link href={`/dashboard?listId=${list.GroceryListID}`} className="text-2xl font-bold text-[#1A3636]">
+                                    <div className="flex-1 pr-4">
+                                        <Link href={`/dashboard?listId=${list.GroceryListID}`} className="text-2xl font-bold text-[#1A3636] hover:underline">
                                             {list.ListName}
                                         </Link>
+                                        
                                         {/* Display the Group that owns the list */}
                                         <p className="text-sm font-medium text-[#677D6A] mt-1 flex items-center gap-1">
                                             {list.Groups?.GroupName || "No Group Assigned"}
                                         </p>
+                                        
+                                        {/*  Display the Description if it exists */}
+                                        {list.ListDescription && (
+                                            <p className="text-sm text-[#1A3636]/60 mt-2 italic line-clamp-2">
+                                                {list.ListDescription}
+                                            </p>
+                                        )}
                                     </div>
                                     
-                                    <div className="flex items-center gap-3">
+                                    <div className="flex items-center gap-3 shrink-0">
                                         {/* Render Delete Button only if owner */}
                                         {list.CreatedBy === user?.UserID && (
                                             <DeleteListButton listID={list.GroceryListID} />
                                         )}
+                                        {/* Passing currentDescription down to the Edit Button */}
                                         {list.CreatedBy === user?.UserID && (
-                                            <EditGroupButton groupID={list.GroceryListID} currentName={list.ListName} />
+                                            <EditListButton 
+                                                listID={list.GroceryListID} 
+                                                currentName={list.ListName} 
+                                                currentDescription={list.ListDescription}
+                                            />
                                         )}
                                         <span className="text-xs font-bold px-3 py-1 bg-[#677D6A]/10 text-[#677D6A] rounded-full uppercase tracking-wider">
                                             {list.Items?.length || 0} Items
@@ -65,7 +78,7 @@ export default async function ListsPage() {
                                     </div>
                                 </div>
 
-                                <div className="flex-1 mt-2">
+                                <div className="flex-1 mt-2 border-t border-[#1A3636]/10 pt-4">
                                     <h3 className="text-sm font-bold text-[#1A3636]/40 uppercase tracking-widest mb-3">Items</h3>
                                     
                                     {/* Scrollable container in case there are many items */}
@@ -80,7 +93,6 @@ export default async function ListsPage() {
                                                         </p>
                                                     </div>
                                                     
-                                                    {/* Optional: Show price if it exists */}
                                                     {item.Price > 0 && (
                                                         <span className="text-xs font-bold text-[#677D6A]">
                                                             ${item.Price.toFixed(2)}

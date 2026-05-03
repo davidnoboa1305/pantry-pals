@@ -60,7 +60,7 @@ export default function EditGroupButton({
             promises.push(updateGroup(nameData));
         }
 
-        // 2. Loop through all queued removals and create a deletion promise for each
+        // Loop through all queued removals and create a deletion promise for each
         for (const targetUserID of pendingRemovals) {
             const removeData = new FormData();
             removeData.append("groupID", groupID);
@@ -143,7 +143,6 @@ export default function EditGroupButton({
                                 )}
                             </div>
 
-                            {/* Master Actions */}
                             <div className="flex justify-end gap-3 pt-4 border-t border-[#1A3636]/10 mt-auto">
                                 <button type="button" onClick={handleCancel} className="px-4 py-2 bg-white/50 hover:bg-white/70 rounded-lg text-[#1A3636] font-bold transition-colors">
                                     Cancel
