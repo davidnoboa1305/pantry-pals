@@ -49,7 +49,6 @@ export default async function Homepage(props: { searchParams: SearchParams }) {
                         {/* Inside the sidebar mapping */}
                         {lists.map((list) => {
                             const isSelected = selectedListId === list.GroceryListID;
-                            const isOwner = user?.UserID === list.CreatedBy;
                             return (
                                 <div 
                                     key={list.GroceryListID} 
@@ -68,12 +67,6 @@ export default async function Homepage(props: { searchParams: SearchParams }) {
                                         </span>
                                         <span className="text-xs text-white/50">{list.Groups?.GroupName}</span>
                                     </Link>
-                                    {/* Render Delete Button only if owner */}
-                                    {isOwner && (
-                                        <div className="mr-3 opacity-0 group-hover:opacity-100 transition-opacity">
-                                            <DeleteListButton listID={list.GroceryListID} />
-                                        </div>
-                                    )}
                                 </div>
                             )
                         })}

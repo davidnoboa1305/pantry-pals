@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import NewItemButton from './NewItemButton';
-import { deleteItem } from "@/actions/itemActions";
+import { deleteItem, toggleItemStatus } from "@/actions/itemActions"; // IMPORT THE NEW ACTION
 
 type SplitUser = {
     UserID: string;
@@ -17,6 +17,7 @@ type Item = {
     ItemName: string;
     Price?: number;
     Quantity?: number;
+    IsBought?: boolean;
     ItemSplits?: SplitUser[]; 
 };
 
@@ -29,8 +30,14 @@ type ListDetails = {
 
 export default function SelectedList({ list, currentUserId }: { list: ListDetails, currentUserId?: string }) {
     const [deleted, setDeleted] = useState<string[]>([]);
+    
+    // Track the optimistic checkbox state locally for instant UI updates
+    const [optimisticStatus, setOptimisticStatus] = useState<Record<string, boolean>>({});
+    
+
     useEffect(() => {
         setDeleted([]);
+        setOptimisticStatus({}); // Reset checkbox states when changing lists
     }, [list?.GroceryListID]);
 
     if (!list) {
@@ -43,7 +50,23 @@ export default function SelectedList({ list, currentUserId }: { list: ListDetail
         );
     }
 
+    // Define visible items
     const visibleItems = list.Items ? list.Items.filter(item => !deleted.includes(item.ItemID)) : [];
+    
+    // Sort items so "Unbought" are at the top and "Bought" are at the bottom
+    const sortedItems = [...visibleItems].sort((a, b) => {
+        // Get the true current status, checking UI first
+        const aBought = optimisticStatus[a.ItemID] !== undefined ? optimisticStatus[a.ItemID] : !!a.IsBought;
+        const bBought = optimisticStatus[b.ItemID] !== undefined ? optimisticStatus[b.ItemID] : !!b.IsBought;
+
+        // If their bought status is different, push the bought one to the bottom
+        if (aBought !== bBought) {
+            return aBought ? 1 : -1;
+        }
+        
+        // If they have the same status, keep them organized alphabetically by name
+        return a.ItemName.localeCompare(b.ItemName);
+    });
     let listTotal = 0;
     let myTotal = 0;
 
@@ -72,6 +95,27 @@ export default function SelectedList({ list, currentUserId }: { list: ListDetail
         }
     };
 
+    // Handle checking/unchecking items
+    const handleToggleBought = async (itemID: string, currentStatus: boolean) => {
+        const newStatus = !currentStatus;
+        
+        // Optimistically update the UI instantly
+        setOptimisticStatus(prev => ({ ...prev, [itemID]: newStatus }));
+
+        // Send the update to Supabase
+        const formData = new FormData();
+        formData.append("itemID", itemID);
+        formData.append("isBought", newStatus.toString());
+
+        const result = await toggleItemStatus(formData);
+        
+        // Revert if the server fails
+        if (result?.error) {
+            console.error("Failed to toggle item status:", result.error);
+            setOptimisticStatus(prev => ({ ...prev, [itemID]: currentStatus }));
+        }
+    };
+
     return (
         <div className="w-full h-full bg-white rounded-2xl shadow-sm border border-[#1A3636]/10 p-8 flex flex-col relative overflow-hidden">
             <h2 className="text-3xl font-bold text-[#1A3636] mb-6 border-b border-[#1A3636]/10 pb-4">
@@ -80,28 +124,41 @@ export default function SelectedList({ list, currentUserId }: { list: ListDetail
             
             <div className="flex-1 overflow-y-auto custom-scrollbar pr-2">
                 <ul className="space-y-4">
-                    {/* Loop over visibleItems instead of list.Items */}
-                    {visibleItems.length > 0 ? (
-                        visibleItems.map((item) => {
+                    {sortedItems.length > 0 ? (
+                        sortedItems.map((item) => {
                             const splitCount = item.ItemSplits?.length || 1;
                             const hasPrice = item.Price && item.Price > 0;
                             const Quantity = item.Quantity || 1
                             const pricePerPerson = hasPrice ? (item.Price! / splitCount) * Quantity : 0;
+                            
+                            // Determine if this specific item is bought (checking local override first, then DB value)
+                            const isBought = optimisticStatus[item.ItemID] !== undefined 
+                                ? optimisticStatus[item.ItemID] 
+                                : !!item.IsBought;
 
                             return (
-                                <li key={item.ItemID} className="flex flex-col pl-2 pr-0 pt-1 pb-2 rounded-xl bg-[#F4F1EA]/70 border border-[#1A3636]/10 shadow-sm transition-all duration-200">
+                                <li key={item.ItemID} className={`flex flex-col pl-2 pr-0 pt-1 pb-2 rounded-xl bg-[#F4F1EA]/70 border border-[#1A3636]/10 shadow-sm transition-all duration-200 ${isBought ? 'opacity-60' : ''}`}>
                                     <div className="flex items-center justify-between mb-2">
                                         <div className="flex items-center gap-3">
-                                            <input type="checkbox" className="w-5 h-5 rounded border border-[#677D6A] bg-white cursor-pointer" />
+                                            <input 
+                                                type="checkbox" 
+                                                checked={isBought}
+                                                onChange={() => handleToggleBought(item.ItemID, isBought)}
+                                                className="w-5 h-5 rounded border border-[#677D6A] accent-[#677D6A] bg-white cursor-pointer" 
+                                            />
                                             <div className='flex items-center gap-1'>
-                                                <span className="text-[#1A3636] font-bold text-md">{item.Quantity}</span>
-                                                <span className="text-[#1A3636] font-bold text-md">{item.ItemName}</span>
+                                                <span className={`font-bold text-md transition-all ${isBought ? 'text-[#1A3636]/50 line-through' : 'text-[#1A3636]'}`}>
+                                                    {item.Quantity}
+                                                </span>
+                                                <span className={`font-bold text-md transition-all ${isBought ? 'text-[#1A3636]/50 line-through' : 'text-[#1A3636]'}`}>
+                                                    {item.ItemName}
+                                                </span>
                                             </div>
                                         </div>
                                         
                                         <div className="flex items-center">
                                             {hasPrice && (
-                                                <span className="text-md font-bold text-[#1A3636] mr-2">
+                                                <span className={`text-md font-bold mr-2 transition-all ${isBought ? 'text-[#1A3636]/50 line-through' : 'text-[#1A3636]'}`}>
                                                     Total: ${(item.Price! * Quantity).toFixed(2)}
                                                 </span>
                                             )}
@@ -121,13 +178,13 @@ export default function SelectedList({ list, currentUserId }: { list: ListDetail
                                         <div className="mx-8 flex items-center justify-between">
                                             <div className="flex flex-wrap gap-1">
                                                 {item.ItemSplits.map(split => (
-                                                    <span key={split.UserID} className="text-xs font-semibold bg-[#D6BD98]/40 text-[#1A3636] px-2 py-1 rounded-md border border-[#D6BD98]">
+                                                    <span key={split.UserID} className={`text-xs font-semibold px-2 py-1 rounded-md border transition-all ${isBought ? 'bg-[#D6BD98]/20 text-[#1A3636]/50 border-[#D6BD98]/50' : 'bg-[#D6BD98]/40 text-[#1A3636] border-[#D6BD98]'}`}>
                                                         {split.Users.UserName}
                                                     </span>
                                                 ))}
                                             </div>
                                             {hasPrice && (
-                                                <span className="text-sm font-bold text-[#677D6A] bg-[#677D6A]/10 px-2 py-1 rounded-md">
+                                                <span className={`text-sm font-bold px-2 py-1 rounded-md transition-all ${isBought ? 'bg-[#677D6A]/5 text-[#677D6A]/50' : 'bg-[#677D6A]/10 text-[#677D6A]'}`}>
                                                     ${pricePerPerson.toFixed(2)} / ea
                                                 </span>
                                             )}

@@ -1,13 +1,13 @@
 "use client";
-import { deleteList } from "@/actions/listActions";
+import { deleteGroup } from "@/actions/groupActions";
 
-export default function DeleteListButton({ listID }: { listID: string }) {
+export default function DeleteGroupButton({ groupID }: { groupID: string }) {
 
     async function handleDelete(e: React.MouseEvent) {
         e.stopPropagation();
         const formData = new FormData();
-        formData.append("listID", listID);
-        await deleteList(formData);
+        formData.append("groupID", groupID);
+        await deleteGroup(formData);
     }
 
     return (

@@ -26,7 +26,7 @@ export default function EditGroupButton({
     const [newName, setNewName] = useState(currentName);
     const [isSubmitting, setIsSubmitting] = useState(false);
     
-    // NEW: Track users queued for removal
+    // Track users queued for removal
     const [pendingRemovals, setPendingRemovals] = useState<string[]>([]);
 
     // Toggle a user in and out of the removal queue
@@ -45,14 +45,14 @@ export default function EditGroupButton({
         setPendingRemovals([]);
     };
 
-    // The master save function
+    // Save function
     async function handleSaveChanges(e: React.FormEvent) {
         e.preventDefault();
         setIsSubmitting(true);
 
         const promises = [];
 
-        // 1. Only update the name if they actually changed it
+        // Only update the name if they actually changed it
         if (newName.trim() !== currentName) {
             const nameData = new FormData();
             nameData.append("groupID", groupID);
@@ -73,7 +73,7 @@ export default function EditGroupButton({
 
         setIsSubmitting(false);
         setIsOpen(false);
-        setPendingRemovals([]); // Clear the queue after successful save
+        setPendingRemovals([]);
     }
 
     return (

@@ -4,6 +4,7 @@ import { getUserGroups } from "@/actions/groupActions";
 import EditGroupButton from "../components/EditGroupButton";
 import { logout } from "@/actions/authActions";
 import { getUserInfo } from "@/actions/userActions";
+import DeleteGroupButton from "../components/DeleteGroupButton";
 
 export default async function GroupsPage() {
     const groups = await getUserGroups();
@@ -40,6 +41,11 @@ export default async function GroupsPage() {
                                 <h2 className="text-2xl font-bold text-[#1A3636]">{group.GroupName}</h2>
                                 
                                 <div className="flex items-center gap-3">
+                                    {group.CreatedBy === user?.UserID && (
+                                        <DeleteGroupButton 
+                                            groupID={group.GroupID} 
+                                        />
+                                    )}
                                     {group.CreatedBy === user?.UserID && (
                                         <EditGroupButton 
                                             groupID={group.GroupID} 

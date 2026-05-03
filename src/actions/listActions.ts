@@ -61,7 +61,7 @@ export async function deleteList(formData: FormData) {
         return {error: "Error deleting list"};
     }
     
-    revalidatePath("/dashboard");
+    revalidatePath("/dashboard/lists");
     return {success: true};
 }
 

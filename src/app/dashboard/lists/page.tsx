@@ -3,6 +3,7 @@ import { getUserInfo } from "@/actions/userActions";
 import { logout } from "@/actions/authActions";
 import EditGroupButton from "../components/EditGroupButton";
 import { getUserLists } from "@/actions/listActions";
+import DeleteListButton from "../components/DeleteListButton";
 
 export default async function ListsPage() {
     const lists = await getUserLists();
@@ -51,6 +52,10 @@ export default async function ListsPage() {
                                     </div>
                                     
                                     <div className="flex items-center gap-3">
+                                        {/* Render Delete Button only if owner */}
+                                        {list.CreatedBy === user?.UserID && (
+                                            <DeleteListButton listID={list.GroceryListID} />
+                                        )}
                                         {list.CreatedBy === user?.UserID && (
                                             <EditGroupButton groupID={list.GroceryListID} currentName={list.ListName} />
                                         )}

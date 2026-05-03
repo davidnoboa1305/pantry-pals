@@ -114,3 +114,29 @@ export async function updateItem(formData: FormData) {
     revalidatePath("/dashboard");
     return { success: true };
 }
+
+
+export async function toggleItemStatus(formData: FormData) {
+    const supabase = await createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    
+    if (!user) {
+        return { error: "User not authenticated" };
+    }
+    
+    const itemID = formData.get("itemID") as string;
+    const isBought = formData.get("isBought") === "true";
+
+    const { error } = await supabase
+        .from("Items")
+        .update({ IsBought: isBought })
+        .eq("ItemID", itemID);
+
+    if (error) {
+        console.error("Error updating item status:", error);
+        return { error: "Failed to update item status" };
+    }
+    
+    revalidatePath("/dashboard");
+    return { success: true };
+}
