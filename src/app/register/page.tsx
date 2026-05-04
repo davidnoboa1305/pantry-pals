@@ -17,7 +17,7 @@ export default function RegisterPage() {
 
     return (
         <div className="flex flex-col min-h-screen items-center justify-center bg-[#1A3636] font-sans">
-            <nav className="w-full flex items-center justify-between p-4">
+            <nav className="w-full flex items-center justify-between py-2 px-4">
                 <div className="flex items-center gap-1">
                     <Image 
                         src="/logo.png" 

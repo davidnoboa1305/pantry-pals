@@ -13,7 +13,7 @@ export default async function ListsPage() {
     return (
         <>
             {/* Navigation - Dark Top Bar */}
-            <nav className="w-full flex items-center justify-between p-4 bg-[#1A3636] shadow-md z-20">
+            <nav className="w-full flex items-center justify-between py-2 px-4 bg-[#1A3636] shadow-md z-20">
                 <div className="flex items-center gap-1">
                     <Image 
                         src="/logo.png" 
