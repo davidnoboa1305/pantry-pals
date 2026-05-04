@@ -38,7 +38,7 @@ export default function LoginPage() {
                     Login to your account to access your pantry and personalized recipe recommendations.
                 </p>
                 
-                <form action={login} className="w-full max-w-sm bg-[#D6BD98] p-8 rounded-xl shadow-2xl text-left">
+                <form action={handleLogin} className="w-full max-w-sm bg-[#D6BD98] p-8 rounded-xl shadow-2xl text-left">
                     {/* Show the error message if one exists */}
                     {errorMessage && (
                         <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded-lg text-sm font-bold">

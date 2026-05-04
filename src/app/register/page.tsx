@@ -1,9 +1,19 @@
 'use client';
 import Link from "next/link";
-import { useActionState } from "react";
+import { useState } from "react";
 import { register } from "@/actions/authActions";
 
-export default function Register() {
+export default function RegisterPage() {
+    const [errorMessage, setErrorMessage] = useState("");
+    async function handleRegister(formData: FormData) {
+        setErrorMessage("");
+        const result = await register(formData);
+        
+        if (result?.error) {
+            setErrorMessage(result.error); // Display the error to the user!
+        }
+    }
+
     return (
         <div className="flex flex-col min-h-screen items-center justify-center bg-[#1A3636] font-sans">
             <nav className="w-full flex items-center justify-between p-4">
@@ -27,7 +37,12 @@ export default function Register() {
                     Create an account to get started with Pantry Pals.
                 </p>
                 
-                <form action={register} className="w-full max-w-sm bg-[#D6BD98] p-8 rounded-xl shadow-2xl text-left">
+                <form action={handleRegister} className="w-full max-w-sm bg-[#D6BD98] p-8 rounded-xl shadow-2xl text-left">
+                    {errorMessage && (
+                        <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded-lg text-sm font-bold">
+                            {errorMessage}
+                        </div>
+                    )}
                     <div className="mb-4">
                         <label htmlFor="firstname" className="block text-[#1A3636] font-bold mb-2">
                             First Name
