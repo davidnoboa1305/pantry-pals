@@ -1,5 +1,5 @@
 "use client";
-import { createGroup } from "@/actions/groupActions"; // Updated import
+import { createGroup } from "@/actions/groupActions";
 import { useState } from "react";
 
 export default function AddGroupButton() {
@@ -28,7 +28,7 @@ export default function AddGroupButton() {
         if (result?.error) {
             console.error("Failed to create group:", result.error);
         } else {
-            openCloseModal(); // Close the modal on success
+            openCloseModal();
         }
     }
 

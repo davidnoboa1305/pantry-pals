@@ -65,7 +65,7 @@ export default function NewListButton() {
         const formData = new FormData();
         formData.append("listName", listName);
         formData.append("listDescription", listDescription);
-        formData.append("groupID", selectedGroupID); // Send the chosen group
+        formData.append("groupID", selectedGroupID);
 
         const result = await createList(formData);
         setIsSubmitting(false);

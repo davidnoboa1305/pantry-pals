@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { getUserInfo } from "@/actions/userActions";
 import { logout } from "@/actions/authActions";
 import { getUserLists } from "@/actions/listActions";
@@ -13,8 +14,17 @@ export default async function ListsPage() {
         <>
             {/* Navigation - Dark Top Bar */}
             <nav className="w-full flex items-center justify-between p-4 bg-[#1A3636] shadow-md z-20">
-                <div className="text-xl font-bold text-[#D6BD98]">
-                    Welcome {user?.FirstName}!
+                <div className="flex items-center gap-1">
+                    <Image 
+                        src="/logo.png" 
+                        alt="PantryPals Logo" 
+                        width={60} 
+                        height={60} 
+                        className="object-contain"
+                    />
+                    <div className="text-xl font-bold text-[#D6BD98]">
+                        Welcome {user?.FirstName}!
+                    </div>
                 </div>
                 <div className="flex space-x-6">
                     <Link href="/dashboard" className="text-gray-300 hover:text-[#D6BD98] py-1 font-medium transition-colors">

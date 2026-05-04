@@ -1,5 +1,5 @@
-import { createClient } from "@/lib/supabase/server";
 import Link from "next/link";
+import Image from "next/image";
 import { getUserGroups } from "@/actions/groupActions";
 import EditGroupButton from "../components/EditGroupButton";
 import { logout } from "@/actions/authActions";
@@ -12,10 +12,19 @@ export default async function GroupsPage() {
 
     return (
         <>
-        {/* Navigation - Dark Top Bar */}
+            {/* Navigation - Dark Top Bar */}
             <nav className="w-full flex items-center justify-between p-4 bg-[#1A3636] shadow-md z-20">
-                <div className="text-xl font-bold text-[#D6BD98]">
-                    Welcome {user?.FirstName}!
+                <div className="flex items-center gap-1">
+                    <Image 
+                        src="/logo.png" 
+                        alt="PantryPals Logo" 
+                        width={60} 
+                        height={60} 
+                        className="object-contain"
+                    />
+                    <div className="text-xl font-bold text-[#D6BD98]">
+                        Welcome {user?.FirstName}!
+                    </div>
                 </div>
                 <div className="flex space-x-6">
                     <Link href="/dashboard" className="text-gray-300 hover:text-[#D6BD98] py-1 font-medium transition-colors">

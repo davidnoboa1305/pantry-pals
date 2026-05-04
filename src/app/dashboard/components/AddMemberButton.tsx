@@ -31,7 +31,7 @@ export default function AddMemberButton({ groupID, groupName }: { groupID: strin
             setFeedback({ type: 'error', msg: result.error });
         } else {
             setFeedback({ type: 'success', msg: "Member added successfully!" });
-            setTimeout(() => closeModal(), 1500); // Close automatically after success
+            setTimeout(() => closeModal(), 1500);
         }
     }
 

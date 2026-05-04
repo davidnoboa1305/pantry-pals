@@ -1,7 +1,7 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 import NewItemButton from './NewItemButton';
-import { deleteItem, toggleItemStatus } from "@/actions/itemActions"; // IMPORT THE NEW ACTION
+import { deleteItem, toggleItemStatus } from "@/actions/itemActions";
 
 type SplitUser = {
     UserID: string;
@@ -10,7 +10,6 @@ type SplitUser = {
         FirstName: string; 
     };
 };
-
 type Item = {
     ItemID: string;
     ItemName: string;
@@ -19,7 +18,6 @@ type Item = {
     IsBought?: boolean;
     ItemSplits?: SplitUser[]; 
 };
-
 type ListDetails = {
     GroceryListID: string;
     GroupID: string; 
@@ -36,7 +34,7 @@ export default function SelectedList({ list, currentUserId }: { list: ListDetail
 
     useEffect(() => {
         setDeleted([]);
-        setOptimisticStatus({}); // Reset checkbox states when changing lists
+        setOptimisticStatus({});
     }, [list?.GroceryListID]);
 
     if (!list) {
@@ -52,13 +50,10 @@ export default function SelectedList({ list, currentUserId }: { list: ListDetail
     // Define visible items
     const visibleItems = list.Items ? list.Items.filter(item => !deleted.includes(item.ItemID)) : [];
     
-    // Sort items so "Unbought" are at the top and "Bought" are at the bottom
     const sortedItems = [...visibleItems].sort((a, b) => {
-        // Get the true current status, checking UI first
         const aBought = optimisticStatus[a.ItemID] !== undefined ? optimisticStatus[a.ItemID] : !!a.IsBought;
         const bBought = optimisticStatus[b.ItemID] !== undefined ? optimisticStatus[b.ItemID] : !!b.IsBought;
 
-        // If their bought status is different, push the bought one to the bottom
         if (aBought !== bBought) {
             return aBought ? 1 : -1;
         }
@@ -97,18 +92,12 @@ export default function SelectedList({ list, currentUserId }: { list: ListDetail
     // Handle checking/unchecking items
     const handleToggleBought = async (itemID: string, currentStatus: boolean) => {
         const newStatus = !currentStatus;
-        
-        // Optimistically update the UI instantly
         setOptimisticStatus(prev => ({ ...prev, [itemID]: newStatus }));
-
-        // Send the update to Supabase
         const formData = new FormData();
         formData.append("itemID", itemID);
         formData.append("isBought", newStatus.toString());
 
         const result = await toggleItemStatus(formData);
-        
-        // Revert if the server fails
         if (result?.error) {
             console.error("Failed to toggle item status:", result.error);
             setOptimisticStatus(prev => ({ ...prev, [itemID]: currentStatus }));
@@ -129,8 +118,6 @@ export default function SelectedList({ list, currentUserId }: { list: ListDetail
                             const hasPrice = item.Price && item.Price > 0;
                             const Quantity = item.Quantity || 1
                             const pricePerPerson = hasPrice ? (item.Price! / splitCount) * Quantity : 0;
-                            
-                            // Determine if this specific item is bought (checking local override first, then DB value)
                             const isBought = optimisticStatus[item.ItemID] !== undefined 
                                 ? optimisticStatus[item.ItemID] 
                                 : !!item.IsBought;

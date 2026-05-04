@@ -65,7 +65,6 @@ export default function EditListButton({
                             
                             <h2 className="text-xl font-bold mb-4 text-[#1A3636]">Edit List</h2>
                             
-                            {/* List Name Input */}
                             <label className="text-sm font-bold text-[#1A3636] mb-1">List Name</label>
                             <input 
                                 value={newName} 
@@ -74,8 +73,6 @@ export default function EditListButton({
                                 placeholder="e.g., Weekly Groceries"
                                 required
                             />
-
-                            {/* List Description Textarea */}
                             <label className="text-sm font-bold text-[#1A3636] mb-1">Description (Optional)</label>
                             <textarea 
                                 value={newDescription} 
@@ -83,11 +80,7 @@ export default function EditListButton({
                                 className="w-full p-3 rounded-lg mb-8 bg-white/70 text-[#1A3636] focus:outline-none focus:ring-2 focus:ring-[#1A3636] resize-none h-24"
                                 placeholder="e.g., Groceries for the upcoming camping trip..."
                             />
-
-                            {/* Master Actions */}
                             <div className="flex justify-end items-center pt-4 border-t border-[#1A3636]/10 mt-auto">
-
-                                {/* Cancel & Save */}
                                 <div className="flex gap-3">
                                     <button 
                                         type="button" 

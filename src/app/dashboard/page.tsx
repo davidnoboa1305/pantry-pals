@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import NewListButton from "./components/NewListButton";
 import AddGroupButton from "./components/AddGroupButton";
 import SelectedList from "./components/SelectedList";
@@ -23,8 +24,17 @@ export default async function Homepage(props: { searchParams: SearchParams }) {
         <div className="flex flex-col h-screen w-screen bg-[#F4F1EA] font-sans overflow-hidden">
             {/* Navigation - Dark Top Bar */}
             <nav className="w-full flex items-center justify-between p-4 bg-[#1A3636] shadow-md z-20">
-                <div className="text-xl font-bold text-[#D6BD98]">
-                    Welcome {user?.FirstName}!
+                <div className="flex items-center gap-1">
+                    <Image 
+                        src="/logo.png" 
+                        alt="PantryPals Logo" 
+                        width={60} 
+                        height={60} 
+                        className="object-contain"
+                    />
+                    <div className="text-xl font-bold text-[#D6BD98]">
+                        Welcome {user?.FirstName}!
+                    </div>
                 </div>
                 <div className="flex space-x-6">
                     <Link href="/dashboard/lists" className="text-gray-300 hover:text-[#D6BD98] py-1 font-medium transition-colors">

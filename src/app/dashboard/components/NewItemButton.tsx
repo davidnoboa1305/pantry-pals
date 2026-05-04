@@ -10,7 +10,6 @@ type GroupMember = {
     LastName: string;
 };
 
-// ADDED currentUserId to props
 export default function NewItemButton({ listID, groupID, currentUserId }: { listID: string, groupID: string, currentUserId: string }) {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -24,8 +23,6 @@ export default function NewItemButton({ listID, groupID, currentUserId }: { list
     const [isLoadingMembers, setIsLoadingMembers] = useState(false);
 
     const [splitMode, setSplitMode] = useState<"all" | "custom">("all");
-
-    // Filter out the current user so they don't appear in the checkbox list
     const otherMembers = groupMembers.filter(m => m.UserID !== currentUserId);
 
     const openModal = () => setIsModalOpen(true);
@@ -46,7 +43,6 @@ export default function NewItemButton({ listID, groupID, currentUserId }: { list
                 const members = await getGroupMembers(groupID);
                 if (members) {
                     setGroupMembers(members as GroupMember[]);
-                    // Default to selecting everyone else when the modal opens
                     const others = (members as GroupMember[]).filter(m => m.UserID !== currentUserId);
                     setSelectedMembers(others.map(m => m.UserID));
                 }
@@ -59,7 +55,6 @@ export default function NewItemButton({ listID, groupID, currentUserId }: { list
     const handleSplitModeChange = (mode: "all" | "custom") => {
         setSplitMode(mode);
         if (mode === "all") {
-            // Select all OTHER members
             setSelectedMembers(otherMembers.map(m => m.UserID));
         } else {
             setSelectedMembers([]);
@@ -83,7 +78,6 @@ export default function NewItemButton({ listID, groupID, currentUserId }: { list
 
         setIsSubmitting(true);
 
-        // ALWAYS include the current user + whoever else they selected
         const finalSharedWith = [...selectedMembers, currentUserId];
 
         const formData = new FormData();

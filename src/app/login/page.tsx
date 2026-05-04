@@ -2,6 +2,7 @@
 import { login } from "@/actions/authActions";
 import { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 
 export default function LoginPage() {
     const [errorMessage, setErrorMessage] = useState("");
@@ -18,7 +19,18 @@ export default function LoginPage() {
     return (
         <div className="flex flex-col min-h-screen items-center justify-center bg-[#1A3636] font-sans">
             <nav className="w-full flex items-center justify-between p-4">
-                <div className="text-xl font-bold text-[#D6BD98]">Pantry Pals</div>
+                <div className="flex items-center gap-1">
+                    <Image 
+                        src="/logo.png" 
+                        alt="PantryPals Logo" 
+                        width={60} 
+                        height={60} 
+                        className="object-contain"
+                    />
+                    <div className="text-xl font-bold text-[#D6BD98]">
+                        Pantry Pals
+                    </div>
+                </div>
                 <div className="flex space-x-4">
                     <Link href="/" className="text-white hover:text-[#D6BD98] p-1 transition-colors font-medium">
                         Home

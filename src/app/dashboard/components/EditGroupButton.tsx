@@ -25,16 +25,13 @@ export default function EditGroupButton({
     const [isOpen, setIsOpen] = useState(false);
     const [newName, setNewName] = useState(currentName);
     const [isSubmitting, setIsSubmitting] = useState(false);
-    
-    // Track users queued for removal
     const [pendingRemovals, setPendingRemovals] = useState<string[]>([]);
 
-    // Toggle a user in and out of the removal queue
     const toggleRemoval = (targetUserID: string) => {
         setPendingRemovals(prev => 
             prev.includes(targetUserID) 
-                ? prev.filter(id => id !== targetUserID) // Undo removal
-                : [...prev, targetUserID]                // Queue for removal
+                ? prev.filter(id => id !== targetUserID)
+                : [...prev, targetUserID]
         );
     };
 
