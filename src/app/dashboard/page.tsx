@@ -3,7 +3,6 @@ import NewListButton from "./components/NewListButton";
 import AddGroupButton from "./components/AddGroupButton";
 import SelectedList from "./components/SelectedList";
 import AddMemberButton from "./components/AddMemberButton";
-import DeleteListButton from "./components/DeleteListButton";
 import { getUserInfo } from "@/actions/userActions";
 import { logout } from "@/actions/authActions";
 import { getUserLists, getListDetails } from "@/actions/listActions"; 

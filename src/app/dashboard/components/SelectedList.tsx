@@ -1,5 +1,4 @@
 'use client';
-
 import React, { useState, useEffect } from 'react';
 import NewItemButton from './NewItemButton';
 import { deleteItem, toggleItemStatus } from "@/actions/itemActions"; // IMPORT THE NEW ACTION
